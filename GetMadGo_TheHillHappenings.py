@@ -15,7 +15,7 @@ import re
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-my_url = "https://www.hillhappenings.com/"
+my_url = "https://www.hillhappenings.com/?category=Food"
 
 # opening up connection, grabbing the page
 
@@ -38,9 +38,56 @@ page_soup = soup(page_html, "html.parser")
 
 # grabs each product
 
-titles = page_soup.findAll("h1", {"class":"eventlist-title"})
-descriptions = page_soup.findAll("p", {"class":"hidden-xs"})
-image_divs = page_soup.findAll("div", {"class":"col-sm-4 col-xs-4"})
+dates = page_soup.findAll("li", attrs={"class":"eventlist-meta-item eventlist-meta-date event-meta-item"})
+titles = page_soup.findAll("h1", attrs={"class":"eventlist-title"})
 
-for events in page_soup.findAll("div", {"class":"media row col-lg-12 col-md-12 col-sm-12 col-xs-12"}):
-    print (events.text)
+#Holds main data
+data = []
+
+#Holds dates
+d = []
+
+#Create a function that returns date
+def Getdates(str):
+
+    for i in dates:
+        for num in i.findAll("time", {"class": "event-date"}):
+            listed_dates = (num["datetime"])
+            d.append(listed_dates)
+
+    return d
+
+#Holds titles
+t =[]
+
+#Create a function that returns titles
+def Gettitles(str):
+
+    for tit in page_soup.findAll("a", {"class": "eventlist-title-link"}):
+        listed_titles = tit.string
+        t.append(listed_titles)
+
+    return t
+
+
+# Add data to one large data set
+
+datesList = Getdates(d)
+titlesList = Gettitles(t)
+
+instance = [datesList, titlesList]
+data.append(instance)
+
+
+#add dates to data
+#data.append([listed_titles, listed_dates])
+
+
+# Import data into csv
+with open("food_on_the_hill.csv", "a") as csv_file:
+    writer = csv.writer(csv_file)
+
+    # Loop through every listed date
+    for food in data:
+        writer.writerow(food)
+

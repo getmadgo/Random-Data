@@ -2,7 +2,6 @@ from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
 import ssl
 import csv
-import csv
 from datetime import datetime
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
@@ -49,8 +48,8 @@ d = []
 
 #Create a function that returns date
 def Getdates(str):
-    
-    #Grabs info from a nested html
+
+    #grabbing the info from a nested html
     for i in dates:
         for num in i.findAll("time", {"class": "event-date"}):
             listed_dates = (num["datetime"])
@@ -70,18 +69,13 @@ def Gettitles(str):
 
     return t
 
-
 # Add data to one large data set
 
 datesList = Getdates(d)
 titlesList = Gettitles(t)
 
-instance = [datesList, titlesList]
+instance = [d, t]
 data.append(instance)
-
-
-#add dates to data
-#data.append([listed_titles, listed_dates])
 
 
 # Import data into csv

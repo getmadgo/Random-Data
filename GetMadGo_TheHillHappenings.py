@@ -49,7 +49,8 @@ d = []
 
 #Create a function that returns date
 def Getdates(str):
-
+    
+    #Grabs info from a nested html
     for i in dates:
         for num in i.findAll("time", {"class": "event-date"}):
             listed_dates = (num["datetime"])
